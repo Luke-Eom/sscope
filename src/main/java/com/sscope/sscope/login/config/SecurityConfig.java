@@ -7,7 +7,6 @@ import com.sscope.sscope.login.security.CustomAuthenticationFilter;
 import com.sscope.sscope.login.security.CustomAuthorizationFilter;
 import com.sscope.sscope.login.security.CustomKakaoAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

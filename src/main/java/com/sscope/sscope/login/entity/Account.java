@@ -22,7 +22,8 @@ public class Account {
     private String email;
 
     @Setter
-    @ManyToMany
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Role role = Role.MEMBER;
 
     private String refreshToken;

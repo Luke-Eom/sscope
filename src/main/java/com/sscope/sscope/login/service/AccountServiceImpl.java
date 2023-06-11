@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sscope.sscope.login.dto.LoginRequest;
 import com.sscope.sscope.login.entity.Account;
 import com.sscope.sscope.login.entity.KakaoUserInfo;
 import com.sscope.sscope.login.enums.Role;
@@ -38,23 +39,16 @@ public class AccountServiceImpl implements AccountService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public Long saveAccount(AccountRequestDto dto) {
+    public Long saveAccount(LoginRequest dto) {
         validateDuplicateUsername(dto);
         dto.encodePassword(passwordEncoder.encode(dto.getPassword()));
         return accountRepo.save(dto.toEntity()).getId();
     }
 
-    private void validateDuplicateUsername(AccountRequestDto dto) {
+    private void validateDuplicateUsername(LoginRequest dto) {
         if (accountRepo.existsByUsername(dto.getUsername())) {
             throw new RuntimeException("이미 존재하는 ID입니다.");
         }
-    }
-
-    @Override
-    public Long addRoleToUser(RoleToUserRequestDto dto) {
-        Account account = accountRepo.findByUsername(dto.getUsername()).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-        return account.getId();
     }
 
     // =============== TOKEN ============ //
@@ -83,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
         String accessToken = JWT.create()
                 .withSubject(account.getUsername())
                 .withExpiresAt(new Date(now + AT_EXP_TIME))
-                .withClaim("roles", account.getRoles())
+                .withClaim("role", account.getRole().toString())
                 .sign(Algorithm.HMAC256(JWT_SECRET));
         Map<String, String> accessTokenResponseMap = new HashMap<>();
 

@@ -51,7 +51,7 @@ public class CustomKakaoAuthenticationFilter extends UsernamePasswordAuthenticat
                     .email(email)
                     .username(email)
                     .password(passwordEncoder.encode(password))
-                    .roles(Role.MEMBER)
+                    .role(Role.MEMBER)
                     .build();
             accountRepo.save(account);
         }
